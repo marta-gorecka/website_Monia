@@ -51,7 +51,21 @@ document.querySelectorAll('.project-link').forEach(link => {
             document.getElementById('modal-title').innerText = title;
         }
         if(document.getElementById('modal-description')) {
-            document.getElementById('modal-description').innerText = desc;
+            const descEl = document.getElementById('modal-description');
+            descEl.innerText = desc;
+
+            // Optional: turn a website mentioned in the description into a link
+            const link = this.getAttribute('data-link');
+            const linkText = this.getAttribute('data-link-text');
+            if (link && linkText && desc.includes(linkText)) {
+                const [before, ...after] = desc.split(linkText);
+                const a = document.createElement('a');
+                a.href = link;
+                a.target = '_blank';
+                a.rel = 'noopener';
+                a.textContent = linkText;
+                descEl.replaceChildren(before, a, after.join(linkText));
+            }
         }
 
         // 3. Show the modal
